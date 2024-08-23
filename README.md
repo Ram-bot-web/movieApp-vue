@@ -1,4 +1,4 @@
-# vue-movie-db-yt
+# vue Movie app using OMDB api
 
 ## Project setup
 ```
