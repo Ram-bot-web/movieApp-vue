@@ -23,12 +23,14 @@
       :grabCursor="true"
       :centeredSlides="true"
       :slidesPerView="'auto'"
+      :speed="3000"
       :coverflowEffect="{
         rotate: 0,
-        stretch: 0,
+        stretch: 10,
         depth: 300,
         modifier: 1,
-        // slideShadows: true,
+        slideShadows: false,
+        scale: 1,
       }"
       :autoplay="{
         delay: 2500,
@@ -76,7 +78,7 @@
       <input type="submit" value="Search" />
     </form>
 
-    <div class="movies-list">
+    <!-- <div class="movies-list">
       <div class="movie" v-for="movie in movies" :key="movie.imdbID">
         <router-link :to="'/movie/' + movie.imdbID" class="movie-link">
           <div class="product-image">
@@ -89,16 +91,31 @@
           </div>
         </router-link>
       </div>
+    </div> -->
+
+    <div class="movies-list">
+      <div class="movie" v-for="movie in movies" :key="movie.imdbId">
+        <router-link :to="'/movie/' + movie.imdbId" class="movie-link">
+          <div class="product-image">
+            <img :src="movie?.imageSet?.horizontalPoster?.w1080" alt="Movie Poster" />
+            <div class="type">{{ movie.showType }}</div>
+          </div>
+          <div class="detail">
+            <p class="year">{{ movie.releaseYear }}</p>
+            <h3>{{ movie.title }}</h3>
+          </div>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import env from "@/env";
-import { ref } from "vue";
+// import env from "@/env";
+import { ref, watch } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
-
+import axios from "axios";
 // Import Swiper styles
 import "swiper/css";
 
@@ -111,6 +128,7 @@ import {
   Autoplay,
   Navigation,
 } from "swiper/modules";
+import { useMovieStore } from "@/stores/useMovieStore";
 // import "./style.css";
 export default {
   components: {
@@ -120,16 +138,45 @@ export default {
   setup() {
     const search = ref("");
     const movies = ref([]);
+    const movieStore = useMovieStore();
 
-    const SearchMovies = () => {
+    watch(() => movieStore.movies, (newMovies) => {
+  console.log('Movies have changed:', newMovies);
+});
+    const SearchMovies = async () => {
       if (search.value != "") {
         console.log(search.value);
-        fetch(`https://www.omdbapi.com/?apikey=${env.apiKey}&s=${search.value}`)
-          .then((Response) => Response.json())
-          .then((data) => {
-            movies.value = data?.Search;
-          })
-          .catch((err) => console.log(err.message));
+        // fetch(`https://www.omdbapi.com/?apikey=${env.apiKey}&s=${search.value}`)
+        //   .then((Response) => Response.json())
+        //   .then((data) => {
+        //     movies.value = data?.Search;
+        //   })
+        //   .catch((err) => console.log(err.message));
+
+        const options = {
+          method: "GET",
+          url: "https://streaming-availability.p.rapidapi.com/shows/search/title",
+          params: {
+            country: "in",
+            title: `${search.value}`,
+          },
+          headers: {
+            "x-rapidapi-key":
+              "79efc24587mshaefa7a1be4a3ad5p1cb9c5jsn2feea23b2d7f",
+            "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
+          },
+        };
+
+        axios.request(options)
+        .then(function (response) {
+          console.log(response.data);
+          movies.value = response.data;
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+
+        await movieStore.fetchSearch(search.value);
       }
     };
 
@@ -296,7 +343,7 @@ export default {
   .swiper-slide {
     background-position: center;
     background-size: cover;
-    width: 800px;
+    width: 700px;
     height: 300px;
   }
 
