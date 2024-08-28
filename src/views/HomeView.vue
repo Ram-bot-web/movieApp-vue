@@ -45,7 +45,7 @@
       <swiper-slide>
         <img src="@/assets/Naruto1.jpg" />
         <div>
-          <h1>Naruto</h1>
+          <h1 style="position: absolute">Naruto</h1>
         </div> </swiper-slide
       ><swiper-slide
         ><img
@@ -93,11 +93,15 @@
       </div>
     </div> -->
 
+    <h1 class="content-title">Movies</h1>
     <div class="movies-list">
       <div class="movie" v-for="movie in movies" :key="movie.imdbId">
         <router-link :to="'/movie/' + movie.imdbId" class="movie-link">
           <div class="product-image">
-            <img :src="movie?.imageSet?.horizontalPoster?.w1080" alt="Movie Poster" />
+            <img
+              :src="movie?.imageSet?.horizontalPoster?.w1080"
+              alt="Movie Poster"
+            />
             <div class="type">{{ movie.showType }}</div>
           </div>
           <div class="detail">
@@ -113,9 +117,9 @@
 <script>
 // @ is an alias to /src
 // import env from "@/env";
-import { ref, watch } from "vue";
+import { ref, toRaw, watch } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import axios from "axios";
+// import axios from "axios";
 // Import Swiper styles
 import "swiper/css";
 
@@ -140,9 +144,19 @@ export default {
     const movies = ref([]);
     const movieStore = useMovieStore();
 
-    watch(() => movieStore.movies, (newMovies) => {
-  console.log('Movies have changed:', newMovies);
-});
+    movies.value = movieStore.movies;
+    watch(
+      () => movieStore.movies,
+      (newMovies) => {
+        console.log("Movies have changed:", toRaw(newMovies.shows));
+        let initial = toRaw(newMovies.shows);
+        initial && initial?.length > 0
+          ? (movies.value = initial)
+          : (movies.value = toRaw(newMovies));
+      }
+    );
+
+    watch(async () => await movieStore.initialFetch());
     const SearchMovies = async () => {
       if (search.value != "") {
         console.log(search.value);
@@ -153,28 +167,28 @@ export default {
         //   })
         //   .catch((err) => console.log(err.message));
 
-        const options = {
-          method: "GET",
-          url: "https://streaming-availability.p.rapidapi.com/shows/search/title",
-          params: {
-            country: "in",
-            title: `${search.value}`,
-          },
-          headers: {
-            "x-rapidapi-key":
-              "79efc24587mshaefa7a1be4a3ad5p1cb9c5jsn2feea23b2d7f",
-            "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-          },
-        };
+        // const options = {
+        //   method: "GET",
+        //   url: "https://streaming-availability.p.rapidapi.com/shows/search/title",
+        //   params: {
+        //     country: "in",
+        //     title: `${search.value}`,
+        //   },
+        //   headers: {
+        //     "x-rapidapi-key":
+        //       "79efc24587mshaefa7a1be4a3ad5p1cb9c5jsn2feea23b2d7f",
+        //     "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
+        //   },
+        // };
 
-        axios.request(options)
-        .then(function (response) {
-          console.log(response.data);
-          movies.value = response.data;
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
+        // axios.request(options)
+        // .then(function (response) {
+        //   console.log(response.data);
+        //   movies.value = response.data;
+        // })
+        // .catch(function (error) {
+        //   console.error(error);
+        // });
 
         await movieStore.fetchSearch(search.value);
       }
@@ -274,6 +288,11 @@ export default {
         }
       }
     }
+  }
+
+  .content-title{
+    margin: 0px 8px;
+    padding: 16px 8px;
   }
 
   .movies-list {

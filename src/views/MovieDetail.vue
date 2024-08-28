@@ -1,34 +1,42 @@
 <template>
-  <div  class="image-backdrop">
-    <img :src="movie.Poster" alt="Movie Poster" style="opacity: 0.5;"/>
+  <div class="image-backdrop">
+    <img
+      :src="movie.horizontalBackdrop?.w1080"
+      alt="Movie Poster"
+      style="opacity: 0.5"
+    />
   </div>
   <div class="movie-detail">
-    <h2>{{ movie.Title }}</h2>
-    <p>{{ movie.Year }}</p>
+    <h2>{{ movie.title }}</h2>
+    <p>{{ movie.releaseYear }}</p>
     <img :src="movie.Poster" alt="Movie Poster" class="featured-img" />
     <p>{{ movie.Plot }}</p>
   </div>
   <div class="backdrop">
-  <div class="content">
-    <h1 class="title"><span class="highlight">THE</span> UNION</h1>
-    <div class="meta">
-      <span>2024</span>
-      <span>PG-13</span>
-      <span>Movie</span>
-      <span>Comedies</span>
-      <span>Action</span>
-      <span>Adventure</span>
+    <div class="content">
+      <h1 class="title"><span class="highlight">THE</span> UNION</h1>
+      <div class="meta">
+        <span>2024</span>
+        <span>PG-13</span>
+        <span>Movie</span>
+        <span>Comedies</span>
+        <span>Action</span>
+        <span>Adventure</span>
+      </div>
+      <p class="description">
+        A New Jersey construction worker goes from regular guy to aspiring spy
+        when his long-lost high school sweetheart recruits him for an espionage
+        mission.
+      </p>
+      <button class="get-started">Get Started</button>
     </div>
-    <p class="description">A New Jersey construction worker goes from regular guy to aspiring spy when his long-lost high school sweetheart recruits him for an espionage mission.</p>
-    <button class="get-started">Get Started</button>
-  </div>
   </div>
 </template>
 
 <script>
 import { ref, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
-import env from "@/env.js";
+import axios from "axios";
 
 export default {
   setup() {
@@ -36,13 +44,36 @@ export default {
     const route = useRoute();
 
     onBeforeMount(() => {
-      fetch(
-        `http://www.omdbapi.com/?apikey=${env.apiKey}&i=${route.params.id}&plot=full`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          movie.value = data;
+      const options = {
+        method: "GET",
+        url: `https://streaming-availability.p.rapidapi.com/shows/${route.params.id}`,
+        params: {
+          series_granularity: "episode",
+          output_language: "en",
+        },
+        headers: {
+          "x-rapidapi-key":
+            "79efc24587mshaefa7a1be4a3ad5p1cb9c5jsn2feea23b2d7f",
+          "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
+        },
+      };
+
+      axios.request(options)
+        .then(function (response) {
+          console.log(response.data);
+          movie.value = response.data;
+        })
+        .catch(function (error) {
+          console.error(error);
         });
+
+      // fetch(
+      //   `http://www.omdbapi.com/?apikey=${env.apiKey}&i=${route.params.id}&plot=full`
+      // )
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     movie.value = data;
+      //   });
     });
 
     return {
@@ -101,7 +132,11 @@ export default {
   left: 0;
   width: 100%;
   height: 50%; /* Adjust the height of the fade effect */
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
   z-index: 2;
 }
 
@@ -109,8 +144,8 @@ export default {
   position: relative;
   width: 100%;
   height: 600px; /* Adjust based on your needs */
-  background-image: url(), 
-                    linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1));
+  background-image: url(),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1));
   background-size: cover;
   background-blend-mode: overlay;
   display: flex;
