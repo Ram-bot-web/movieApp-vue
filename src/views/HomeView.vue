@@ -43,34 +43,30 @@
       class="mySwiper"
     >
       <swiper-slide>
-        <img src="@/assets/Naruto1.jpg" />
+        <img src="@/assets/Avengers.jpg" />
         <div>
           <h1 style="position: absolute">Naruto</h1>
         </div> </swiper-slide
       ><swiper-slide
         ><img
-          src="https://swiperjs.com/demos/images/nature-2.jpg" /></swiper-slide
+          src="@/assets/Batman.jpg" /></swiper-slide
       ><swiper-slide
         ><img
-          src="https://swiperjs.com/demos/images/nature-3.jpg" /></swiper-slide
+          src="@/assets/Dont.jpg" /></swiper-slide
       ><swiper-slide
         ><img
-          src="https://swiperjs.com/demos/images/nature-4.jpg" /></swiper-slide
+          src="@/assets/Hobbit.jpg" /></swiper-slide
       ><swiper-slide
         ><img
-          src="https://swiperjs.com/demos/images/nature-5.jpg" /></swiper-slide
+          src="@/assets/mancipation.jpg" /></swiper-slide
       ><swiper-slide
         ><img
-          src="https://swiperjs.com/demos/images/nature-6.jpg" /></swiper-slide
+          src="@/assets/Master.jpg" /></swiper-slide
       ><swiper-slide
         ><img
-          src="https://swiperjs.com/demos/images/nature-7.jpg" /></swiper-slide
-      ><swiper-slide
-        ><img
-          src="https://swiperjs.com/demos/images/nature-8.jpg" /></swiper-slide
-      ><swiper-slide
-        ><img src="https://swiperjs.com/demos/images/nature-9.jpg"
-      /></swiper-slide>
+          src="@/assets/sinister.jpg" /></swiper-slide
+      >
+      <!-- <swiper-slide><img src="https://swiperjs.com/demos/images/nature-9.jpg"/></swiper-slide> -->
     </swiper>
 
     <form @submit.prevent="SearchMovies()" class="search-box">
