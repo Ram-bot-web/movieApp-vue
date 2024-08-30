@@ -64,7 +64,7 @@
           src="@/assets/Master.jpg" /></swiper-slide
       ><swiper-slide
         ><img
-          src="@/assets/sinister.jpg" /></swiper-slide
+          src="@/assets/sinister.jpg" /></swiper-slide 
       >
       <!-- <swiper-slide><img src="https://swiperjs.com/demos/images/nature-9.jpg"/></swiper-slide> -->
     </swiper>
