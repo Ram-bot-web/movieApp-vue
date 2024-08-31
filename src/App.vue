@@ -21,7 +21,8 @@
   }
 
   body{
-    background-color: #35495e;
+    // background-color: #35495e;
+    background-color: #151c1f;
   }
 
   a{

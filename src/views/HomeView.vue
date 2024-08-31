@@ -95,14 +95,17 @@
         <router-link :to="'/movie/' + movie.imdbId" class="movie-link">
           <div class="product-image">
             <img
-              :src="movie?.imageSet?.horizontalPoster?.w1080"
+              :src="movie?.imageSet?.verticalPoster?.w720"
               alt="Movie Poster"
             />
-            <div class="type">{{ movie.showType }}</div>
+            <div class="type">{{ movie?.showType }}</div>
           </div>
           <div class="detail">
-            <p class="year">{{ movie.releaseYear }}</p>
+            <p class="year">{{ movie?.releaseYear }}</p>
             <h3>{{ movie.title }}</h3>
+            <div class="rating-container"><span class="rating">Rating:{{ movie?.rating }}/100 </span></div>
+            <!-- <div v-for="stream in movie.streamingOptions?.in" :key="stream.type"><img alt="stream" class="stream-img" :src="stream?.service?.imageSet?.lightThemeImage" /></div> -->
+            <div><img alt="stream" class="stream-img" :src="movie.streamingOptions?.in[0]?.service?.imageSet?.lightThemeImage" /></div>
           </div>
         </router-link>
       </div>
@@ -129,7 +132,7 @@ import {
   Navigation,
 } from "swiper/modules";
 import { useMovieStore } from "@/stores/useMovieStore";
-// import "./style.css";
+import "@/styles/style.scss";
 export default {
   components: {
     Swiper,
@@ -201,174 +204,175 @@ export default {
 </script>
 
 <style lang="scss">
-.home {
-  .feature-card {
-    position: relative;
+// .home {
+//   .feature-card {
+//     position: relative;
 
-    .featured-img {
-      display: block;
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
+//     .featured-img {
+//       display: block;
+//       width: 100%;
+//       height: 300px;
+//       object-fit: cover;
 
-      position: relative;
-      z-index: 0;
-    }
+//       position: relative;
+//       z-index: 0;
+//     }
 
-    .detail {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 16px;
-      z-index: 1;
+//     .detail {
+//       position: absolute;
+//       left: 0;
+//       right: 0;
+//       bottom: 0;
+//       background-color: rgba(0, 0, 0, 0.6);
+//       padding: 16px;
+//       z-index: 1;
 
-      h3 {
-        color: #fff;
-        margin-bottom: 16px;
-      }
+//       h3 {
+//         color: #fff;
+//         margin-bottom: 16px;
+//       }
 
-      p {
-        color: #fff;
-      }
-    }
-  }
+//       p {
+//         color: #fff;
+//       }
+//     }
+//   }
 
-  .search-box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
+//   .search-box {
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+//     padding: 16px;
 
-    input {
-      display: block;
-      appearance: none;
-      border: none;
-      outline: none;
-      background: none;
+//     input {
+//       display: block;
+//       appearance: none;
+//       border: none;
+//       outline: none;
+//       background: none;
 
-      &[type="text"] {
-        width: 100%;
-        color: #fff;
-        background-color: #496583;
-        font-size: 20px;
-        padding: 10px 16px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        transition: 0.4s;
+//       &[type="text"] {
+//         width: 100%;
+//         color: #fff;
+//         background-color: #496583;
+//         font-size: 20px;
+//         padding: 10px 16px;
+//         border-radius: 8px;
+//         margin-bottom: 15px;
+//         transition: 0.4s;
 
-        &::placeholder {
-          color: #f3f3f3;
-        }
+//         &::placeholder {
+//           color: #f3f3f3;
+//         }
 
-        &:focus {
-          box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
-        }
-      }
+//         &:focus {
+//           box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+//         }
+//       }
 
-      &[type="submit"] {
-        width: 100%;
-        max-width: 300px;
-        background-color: #42b883;
-        padding: 16px;
-        border-radius: 8px;
-        color: #fff;
-        font-size: 20px;
-        text-transform: uppercase;
-        transition: 0.4s;
+//       &[type="submit"] {
+//         width: 100%;
+//         max-width: 300px;
+//         background-color: #42b883;
+//         padding: 16px;
+//         border-radius: 8px;
+//         color: #fff;
+//         font-size: 20px;
+//         text-transform: uppercase;
+//         transition: 0.4s;
 
-        &:active {
-          background-color: #3b8070;
-        }
-      }
-    }
-  }
+//         &:active {
+//           background-color: #3b8070;
+//         }
+//       }
+//     }
+//   }
 
-  .content-title{
-    margin: 0px 8px;
-    padding: 16px 8px;
-  }
+//   .content-title{
+//     margin: 0px 8px;
+//     padding: 16px 8px;
+//   }
 
-  .movies-list {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0px 8px;
+//   .movies-list {
+//     display: flex;
+//     flex-wrap: wrap;
+//     margin: 0px 8px;
 
-    .movie {
-      max-width: 50%;
-      flex: 1 1 50%;
-      padding: 16px 8px;
+//     .movie {
+//       max-width: 50%;
+//       // flex: 1 1 50%;
+//       flex: 1 1 20%;
+//       padding: 16px 8px;
 
-      .movie-link {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
+//       .movie-link {
+//         display: flex;
+//         flex-direction: column;
+//         height: 100%;
 
-        .product-image {
-          position: relative;
-          display: block;
+//         .product-image {
+//           position: relative;
+//           display: block;
 
-          img {
-            display: block;
-            width: 100%;
-            height: 275px;
-            object-fit: cover;
-          }
+//           img {
+//             display: block;
+//             width: 100%;
+//             height: 275px;
+//             object-fit: cover;
+//           }
 
-          .type {
-            position: absolute;
-            padding: 8px 16px;
-            background-color: #42b883;
-            color: #fff;
-            bottom: 16px;
-            left: 0px;
-            text-transform: capitalize;
-          }
-        }
+//           .type {
+//             position: absolute;
+//             padding: 8px 16px;
+//             background-color: #42b883;
+//             color: #fff;
+//             bottom: 16px;
+//             left: 0px;
+//             text-transform: capitalize;
+//           }
+//         }
 
-        .detail {
-          background-color: #496583;
-          padding: 16px 8px;
-          flex: 1 1 100%;
-          border-radius: 0px 0px 8px 8px;
+//         .detail {
+//           background-color: #496583;
+//           padding: 16px 8px;
+//           flex: 1 1 100%;
+//           border-radius: 0px 0px 8px 8px;
 
-          .year {
-            color: #aaa;
-            font-size: 14px;
-          }
+//           .year {
+//             color: #aaa;
+//             font-size: 14px;
+//           }
 
-          h3 {
-            color: #fff;
-            font-weight: 600;
-            font-size: 18px;
-          }
-        }
-      }
-    }
-  }
+//           h3 {
+//             color: #fff;
+//             font-weight: 600;
+//             font-size: 18px;
+//           }
+//         }
+//       }
+//     }
+//   }
 
-  .swiper {
-    width: 100%;
-    padding-top: 50px;
-    padding-bottom: 50px;
-  }
+//   .swiper {
+//     width: 100%;
+//     padding-top: 50px;
+//     padding-bottom: 50px;
+//   }
 
-  .swiper-slide {
-    background-position: center;
-    background-size: cover;
-    width: 700px;
-    height: 300px;
-  }
+//   .swiper-slide {
+//     background-position: center;
+//     background-size: cover;
+//     width: 700px;
+//     height: 300px;
+//   }
 
-  .swiper-slide img {
-    display: block;
-    width: 100%;
-  }
+//   .swiper-slide img {
+//     display: block;
+//     width: 100%;
+//   }
 
-  .home .swiper-slide {
-    width: 800px !important;
-  }
-}
+//   .home .swiper-slide {
+//     width: 800px !important;
+//   }
+// }
 </style>
