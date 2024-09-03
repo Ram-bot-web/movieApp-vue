@@ -105,7 +105,7 @@
             <h3>{{ movie.title }}</h3>
             <div class="rating-container"><span class="rating">Rating:{{ movie?.rating }}/100 </span></div>
             <!-- <div v-for="stream in movie.streamingOptions?.in" :key="stream.type"><img alt="stream" class="stream-img" :src="stream?.service?.imageSet?.lightThemeImage" /></div> -->
-            <div><img alt="stream" class="stream-img" :src="movie.streamingOptions?.in[0]?.service?.imageSet?.lightThemeImage" /></div>
+            <div><img alt="stream" class="stream-img" :src="movie?.streamingOptions?.hasOwnProperty('in') ? movie?.streamingOptions?.in[0]?.service?.imageSet?.lightThemeImage : none " /></div>
           </div>
         </router-link>
       </div>
@@ -133,6 +133,7 @@ import {
 } from "swiper/modules";
 import { useMovieStore } from "@/stores/useMovieStore";
 import "@/styles/style.scss";
+import none from '@/assets/none.png'
 export default {
   components: {
     Swiper,
@@ -196,6 +197,7 @@ export default {
     return {
       search,
       movies,
+      none,
       SearchMovies,
       modules: [Autoplay, EffectCoverflow, Pagination, Navigation],
     };
