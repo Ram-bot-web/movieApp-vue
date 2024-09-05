@@ -69,6 +69,7 @@
       <!-- <swiper-slide><img src="https://swiperjs.com/demos/images/nature-9.jpg"/></swiper-slide> -->
     </swiper>
 
+    
     <form @submit.prevent="SearchMovies()" class="search-box">
       <input type="text" placeholder="Search Movie" v-model="search" />
       <input type="submit" value="Search" />
