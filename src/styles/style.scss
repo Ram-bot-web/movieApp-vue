@@ -85,9 +85,52 @@ $small: 426px;
     }
   }
 
-  .content-title {
-    margin: 0px 8px;
-    padding: 16px 8px;
+  .title-container {
+    display: flex;
+    flex-wrap: wrap;
+
+    .title {
+      flex: 1 1 50%;
+
+      .content-title {
+        margin: 0px 8px;
+        padding: 16px 8px;
+      }
+    }
+
+    .search-div {
+      justify-content: right;
+      align-items: center;
+      display: flex;
+      flex: 1 1 50%;
+      padding: 0px 10px;
+
+      .search-field {
+        color: #fff;
+        background-color: #333940;
+        font-size: 20px;
+        padding: 10px 16px;
+        border-radius: 8px 0px 0px 8px;
+        /* margin-bottom: 15px; */
+        transition: 0.4s;
+        border: none;
+        outline: none;
+      }
+
+      .search-btn {
+        max-width: 300px;
+        background-color: #edff10;
+        padding: 12px 10px;
+        border-radius: 0px 8px 8px 0px;
+        color: #fff;
+        color: #000;
+        /* font-size: 20px; */
+        font-weight: 800;
+        /* text-transform: uppercase; */
+        transition: 0.4s;
+        border: none;
+      }
+    }
   }
 
   .movies-list {
@@ -132,7 +175,7 @@ $small: 426px;
         }
 
         .detail {
-        //   background-color: #496583;
+          //   background-color: #496583;
           background-color: #3a3a3a;
           padding: 16px 8px;
           flex: 1 1 100%;

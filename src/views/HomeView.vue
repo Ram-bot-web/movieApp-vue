@@ -70,10 +70,10 @@
     </swiper>
 
     
-    <form @submit.prevent="SearchMovies()" class="search-box">
+    <!-- <form @submit.prevent="SearchMovies()" class="search-box">
       <input type="text" placeholder="Search Movie" v-model="search" />
       <input type="submit" value="Search" />
-    </form>
+    </form> -->
 
     <!-- <div class="movies-list">
       <div class="movie" v-for="movie in movies" :key="movie.imdbID">
@@ -90,7 +90,17 @@
       </div>
     </div> -->
 
-    <h1 class="content-title">Movies</h1>
+    <div class="title-container" style="margin-top: 5%;">
+      <div class="title">
+        <h1 class="content-title">Movies</h1>
+      </div>
+      <div class="search-div">
+        <form @submit.prevent="SearchMovies()">
+          <input type="text" class="search-field" placeholder="Search Movie" v-model="search" />
+          <input type="submit" class="search-btn" value="Search" />
+        </form>
+      </div>
+    </div>
     <div class="movies-list">
       <div class="movie" v-for="movie in movies" :key="movie.imdbId">
         <router-link :to="'/movie/' + movie.imdbId" class="movie-link">
