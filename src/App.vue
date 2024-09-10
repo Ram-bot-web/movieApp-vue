@@ -65,8 +65,10 @@
   h1 {
     color: #fff;
     font-size: 28px;
+    font-family: "Silkscreen", sans-serif;
 
     span {
+      font-family: "Silkscreen", sans-serif;
       color: #42b883;
     }
   }

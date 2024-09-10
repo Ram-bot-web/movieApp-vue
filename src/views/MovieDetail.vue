@@ -1,7 +1,7 @@
 <template>
   <div class="image-backdrop">
     <img
-      :src="movie.horizontalBackdrop?.w1080"
+      :src="movie?.imageSet?.horizontalBackdrop?.w1080"
       alt="Movie Poster"
       style="opacity: 0.5"
     />
@@ -9,10 +9,62 @@
   <div class="movie-detail">
     <h2>{{ movie.title }}</h2>
     <p>{{ movie.releaseYear }}</p>
-    <img :src="movie.Poster" alt="Movie Poster" class="featured-img" />
+    <img
+      :src="movie?.imageSet?.verticalPoster?.w720"
+      alt="Movie Poster"
+      class="featured-img"
+    />
     <p>{{ movie.Plot }}</p>
   </div>
-  <div class="backdrop">
+  <div class="movie detail1 backdrop">
+    <div class="content">
+      <div class="meta">
+        <span v-for="tags in movie?.genres" :key="tags.id">{{
+          tags.name
+        }}</span>
+      </div>
+      <p class="description">
+        {{ movie.overview }}
+      </p>
+      <p class="directors">
+        Director :
+        <span
+          class="highlight"
+          v-for="(dir, index) in movie?.directors"
+          :key="index"
+          >{{ dir + (index < movie?.directors.length - 1 ? ", " : ".") }}</span
+        >
+      </p>
+      <br />
+      <p class="cast">
+        Cast :
+        <span
+          class="highlight"
+          v-for="(cast, index) in movie?.cast"
+          :key="index"
+          >{{ cast + (index < movie?.cast.length - 1 ? ", " : ".") }}</span
+        >
+      </p>
+      <p class="cast">Streaming :</p>
+      <div>
+        <a
+          v-for="stream in movie?.streamingOptions?.in"
+          :key="stream.type"
+          :href="stream?.link"
+          target="_blank"
+          ><img
+            alt="stream"
+            class="stream-img"
+            :src="
+              stream?.service?.imageSet?.lightThemeImage
+                ? stream?.service?.imageSet?.lightThemeImage
+                : none
+            "
+        /></a>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="backdrop">
     <div class="content">
       <h1 class="title"><span class="highlight">THE</span> UNION</h1>
       <div class="meta">
@@ -30,13 +82,14 @@
       </p>
       <button class="get-started">Get Started</button>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
 import { ref, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
+import none from "@/assets/none.png";
 
 export default {
   setup() {
@@ -58,7 +111,8 @@ export default {
         },
       };
 
-      axios.request(options)
+      axios
+        .request(options)
         .then(function (response) {
           console.log(response.data);
           movie.value = response.data;
@@ -78,6 +132,7 @@ export default {
 
     return {
       movie,
+      none,
     };
   },
 };
@@ -86,10 +141,14 @@ export default {
 <style lang="scss">
 .movie-detail {
   padding: 16px;
+  position: absolute;
+  top: 10%;
+  z-index: 2;
 
   h2 {
     color: #fff;
-    font-size: 28px;
+    // font-size: 28px;
+    font-size: 50px;
     font-weight: 600;
     margin-bottom: 16px;
   }
@@ -110,7 +169,7 @@ export default {
 .image-backdrop {
   position: relative;
   width: 100%;
-  height: 400px; /* Adjust based on your needs */
+  height: 450px;
   overflow: hidden;
 }
 
@@ -141,49 +200,65 @@ export default {
 }
 
 .backdrop {
-  position: relative;
-  width: 100%;
-  height: 600px; /* Adjust based on your needs */
-  background-image: url(),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1));
-  background-size: cover;
-  background-blend-mode: overlay;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
+  // position: relative;
+  // width: 100%;
+  // height: 600px; /* Adjust based on your needs */
+  // background-image: url(),
+  //   linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1));
+  // background-size: cover;
+  // background-blend-mode: overlay;
+  // display: flex;
+  // justify-content: flex-start;
+  // align-items: flex-end;
   padding: 20px;
   color: white;
-}
 
-.content {
-  max-width: 400px;
-}
+  .content {
+    max-width: 400px;
+  }
 
-.title {
-  font-size: 48px;
-  font-weight: bold;
-  margin: 0;
-  line-height: 1.2;
-}
+  .title {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.2;
+  }
 
-.highlight {
-  color: #f9a825;
-}
+  .highlight {
+    color: #f9a825;
+  }
 
-.meta {
-  margin: 15px 0;
-}
+  .meta {
+    margin: 15px 0;
+  }
 
-.meta span {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 5px 10px;
-  border-radius: 5px;
-  margin-right: 5px;
-  font-size: 14px;
-}
+  .meta span {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 5px;
+    font-size: 14px;
+    font-weight: 600;
+  }
 
-.description {
-  margin-bottom: 20px;
+  .description {
+    margin-bottom: 20px;
+    padding: 2% 0%;
+  }
+
+  .directors {
+    font-weight: 600;
+    padding: 2% 0%;
+  }
+
+  .cast {
+    font-weight: 600;
+    padding: 2% 0%;
+  }
+
+  .stream-img {
+    padding: 5% 5%;
+  }
 }
 
 .get-started {
